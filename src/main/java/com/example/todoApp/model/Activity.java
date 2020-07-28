@@ -1,5 +1,6 @@
 package com.example.todoApp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -13,19 +14,19 @@ public class Activity {
     private Long id;
 
     @Column(nullable = false)
-    private String activity;
+    private String activity_text;
 
     @Column(nullable = false)
     @ColumnDefault("false")
     private boolean status;
 
     @ManyToOne
-    @JoinColumn(name="buildingId")
-    private Building buildingId;
+    @JoinColumn(name="building_Id")
+    private Building building;
 
     @ManyToOne
-    @JoinColumn(name ="personId")
-    private Person personId;
+    @JoinColumn(name ="person_Id")
+    private Person person;
 
     public Long getId() {
         return id;
@@ -35,12 +36,12 @@ public class Activity {
         this.id = id;
     }
 
-    public String getActivity() {
-        return activity;
+    public String getActivity_text() {
+        return activity_text;
     }
 
-    public void setActivity(String activity) {
-        this.activity = activity;
+    public void setActivity_text(String activity_text) {
+        this.activity_text = activity_text;
     }
 
     public boolean isStatus() {
@@ -51,19 +52,19 @@ public class Activity {
         this.status = status;
     }
 
-    public Building getBuildingId() {
-        return buildingId;
+    public Building getBuilding() {
+        return building;
     }
 
-    public void setBuildingId(Building buildingId) {
-        this.buildingId = buildingId;
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
-    public Person getPersonId() {
-        return personId;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonId(Person personId) {
-        this.personId = personId;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
-import BuildingService from "./service/BuildingService.js"
+import ActivityService from "./service/ActivityService.js"
 
 class TodoList extends Component{
 
 constructor(props) {
            super(props)
            this.state = {
-                       todos: []
+                       activities: []
                    }
-           this.refreshTodos = this.refreshTodos.bind(this)
+           this.refreshActivityText = this.refreshActivityText.bind(this)
     };
 componentDidMount() {
-        this.refreshTodos();
+        this.refreshActivityText();
 }
-refreshTodos() {
-        BuildingService.retrieveAllBuildings()//HARDCODED
+refreshActivityText() {
+        ActivityService.retrieveAllActivities()
             .then(
                 response => {
                     console.log(response);
-                     this.setState({ todos: response.data })
+                     this.setState({ activities: response.data })
                 }
             )
     }
@@ -32,25 +32,29 @@ render(){
                         <tr>
                             <th>Id</th>
                             <th>Description</th>
+                            <th>Building</th>
+                            <th>Person</th>
+                            <th>Action </th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            this.state.todos.map(
-                                todo =>
-                                    <tr key={todo.id}>
-                                        <td>{todo.id}</td>
-                                        <td>{todo.name}</td>
+                            this.state.activities.map(
+                                activity =>
+                                    <tr key={activity.id}>
+                                        <td>{activity.id}</td>
+                                        <td>{activity.activity_text}</td>
+                                        <td>{activity.building  === null ? '' : activity.building.name}</td>
+                                        <td>{activity.person  === null ? '' : activity.person.name}</td>
+                                        <td> Delete</td>
+
                                     </tr>
                             )
                         }
 
 
 
-                        <tr>
-                            <td>1</td>
-                            <td>Todo Task #1</td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>

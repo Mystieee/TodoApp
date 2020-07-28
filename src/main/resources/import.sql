@@ -14,8 +14,13 @@ VALUES
   ('Jack');
 
 INSERT INTO activity
-  (activity)
+  (activity_text)
 VALUES
 ('Some Activity'),
 ('New Activity '),
 ('Extra Activity');
+
+UPDATE activity SET
+  person_Id = (SELECT id FROM person WHERE name = 'John'),
+  building_Id = (SELECT id FROM building WHERE name = 'Dubai Frame')
+WHERE activity_text = 'Some Activity';
