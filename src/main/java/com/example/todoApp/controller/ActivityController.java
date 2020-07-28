@@ -1,18 +1,17 @@
 package com.example.todoApp.controller;
 
 import com.example.todoApp.model.Activity;
-import com.example.todoApp.model.Building;
 import com.example.todoApp.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@RestController
 @CrossOrigin
+@RestController
 @RequestMapping("/api")
 public class ActivityController {
 
@@ -24,6 +23,16 @@ public class ActivityController {
         return repository.findAll();
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Activity> deleteActivity(@PathVariable(required = true) long id){
 
+        Optional<Activity> activity = repository.findById(id);
+
+        if(!activity.isPresent()){
+            return  new ResponseEntity("Activity not in Database",HttpStatus.NOT_FOUND);
+        }
+        repository.deleteById(id);
+        return new ResponseEntity("Activity Deleted Successfully", HttpStatus.NO_CONTENT);
+    }
 
 }

@@ -5,5 +5,9 @@ class ActivityService {
     retrieveAllActivities() {
         return axios.get(`${API_URL}/api/activities`);
     }
+
+    deleteActivity(id){
+        return axios.delete(`${API_URL}/api/delete/${id}`);
+    }
 }
 export default new ActivityService()

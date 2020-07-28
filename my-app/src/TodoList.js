@@ -3,24 +3,35 @@ import ActivityService from "./service/ActivityService.js"
 
 class TodoList extends Component{
 
-constructor(props) {
-           super(props)
-           this.state = {
-                       activities: []
-                   }
-           this.refreshActivityText = this.refreshActivityText.bind(this)
+    constructor(props) {
+               super(props)
+               this.state = {
+                           activities: []
+                       }
+               this.refreshActivityText = this.refreshActivityText.bind(this)
+               this.deleteActivityClicked = this.deleteActivityClicked.bind(this)
     };
-componentDidMount() {
-        this.refreshActivityText();
-}
-refreshActivityText() {
+    componentDidMount() {
+            this.refreshActivityText();
+    }
+    refreshActivityText() {
         ActivityService.retrieveAllActivities()
             .then(
                 response => {
-                    console.log(response);
                      this.setState({ activities: response.data })
                 }
             )
+    }
+
+    deleteActivityClicked(id){
+         ActivityService.deleteActivity(id)
+            .then(
+                response => {
+                    this.refreshActivityText()
+                }
+            ).catch(error => {
+                 console.log(error.response)
+             });
     }
 
 render(){
@@ -46,8 +57,7 @@ render(){
                                         <td>{activity.activity_text}</td>
                                         <td>{activity.building  === null ? '' : activity.building.name}</td>
                                         <td>{activity.person  === null ? '' : activity.person.name}</td>
-                                        <td> Delete</td>
-
+                                        <td><button className ="btn btn-warning" onClick={() => this.deleteActivityClicked(activity.id)} >Delete </button></td>
                                     </tr>
                             )
                         }
