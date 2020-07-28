@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import TodoList from "./TodoList.js"
 import BuildingService from "./service/BuildingService.js"
 import PersonService from "./service/PersonService.js"
 
@@ -41,7 +40,7 @@ render(){
      return (
         <div >
             <div className="container">
-                 <h1> Todo App </h1>
+                 <h1>Todo App</h1>
                 <form>
                     Activity: <input type="text" name="activity"/>
                     <br/>
@@ -72,7 +71,7 @@ render(){
                 </form>
             </div>
             <br />
-            <TodoList />
+
 
         </div>
       );

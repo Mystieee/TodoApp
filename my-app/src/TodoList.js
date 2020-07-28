@@ -10,6 +10,8 @@ class TodoList extends Component{
                        }
                this.refreshActivityText = this.refreshActivityText.bind(this)
                this.deleteActivityClicked = this.deleteActivityClicked.bind(this)
+               this.updateActivityClicked = this.updateActivityClicked.bind(this)
+               this.addActivityClicked = this.addActivityClicked.bind(this)
     };
     componentDidMount() {
             this.refreshActivityText();
@@ -32,6 +34,15 @@ class TodoList extends Component{
             ).catch(error => {
                  console.log(error.response)
              });
+    }
+
+    updateActivityClicked(id){
+          console.log('update ' + id)
+          this.props.history.push(`/todos/${id}`)
+    }
+
+    addActivityClicked(){
+            this.props.history.push(`/todos/-1`)
     }
 
 render(){
@@ -57,7 +68,9 @@ render(){
                                         <td>{activity.activity_text}</td>
                                         <td>{activity.building  === null ? '' : activity.building.name}</td>
                                         <td>{activity.person  === null ? '' : activity.person.name}</td>
-                                        <td><button className ="btn btn-warning" onClick={() => this.deleteActivityClicked(activity.id)} >Delete </button></td>
+                                        <td><button className ="btn btn-warning" onClick={() => this.deleteActivityClicked(activity.id)} >Delete</button>&nbsp;&nbsp;&nbsp;
+                                        <button className="btn btn-success" onClick={() => this.updateActivityClicked(activity.id)}>Update</button></td>
+
                                     </tr>
                             )
                         }
@@ -67,6 +80,10 @@ render(){
 
                     </tbody>
                 </table>
+
+                <div className="row">
+                    <button className="btn btn-success" onClick={this.addActivityClicked}>Add</button>
+                </div>
             </div>
         </div>
     );
