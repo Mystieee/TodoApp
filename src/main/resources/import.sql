@@ -12,3 +12,10 @@ VALUES
   ('John'),
   ('Doe'),
   ('Jack');
+
+INSERT INTO activity
+  (activity)
+VALUES
+('Some Activity'),
+('New Activity '),
+('Extra Activity');

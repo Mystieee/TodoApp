@@ -1,5 +1,7 @@
 package com.example.todoApp.model;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,7 @@ public class Activity {
     private String activity;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     private boolean status;
 
     @ManyToOne
