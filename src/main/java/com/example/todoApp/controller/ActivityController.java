@@ -23,6 +23,18 @@ public class ActivityController {
         return repository.findAll();
     }
 
+    @GetMapping("/activities/{id}")
+    public ResponseEntity<Activity> getActivityById(@PathVariable(required = true) long id){
+
+        Optional<Activity> activity = repository.findById(id);
+
+        if(activity.isEmpty()){
+            return  new ResponseEntity("Activity todo not found in Database", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(activity, HttpStatus.ACCEPTED);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Activity> deleteActivity(@PathVariable(required = true) long id){
 
