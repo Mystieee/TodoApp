@@ -22,10 +22,12 @@ public class Activity {
 
     @ManyToOne
     @JoinColumn(name="building_Id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer" })
     private Building building;
 
     @ManyToOne
     @JoinColumn(name ="person_Id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer" })
     private Person person;
 
     public Long getId() {
@@ -66,5 +68,11 @@ public class Activity {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+
+    @Override
+    public String toString() {
+        return "text: "+activity_text +" building: "+building+" person: "+person;
     }
 }

@@ -37,7 +37,7 @@ class TodoList extends Component{
     }
 
     updateActivityClicked(id){
-          console.log('update ' + id)
+            console.log("update button clicked..redirecting to todo");
           this.props.history.push(`/todos/${id}`)
     }
 
@@ -64,7 +64,7 @@ render(){
                             this.state.activities.map(
                                 activity =>
                                     <tr key={activity.id}>
-                                        <td>{activity.id}</td>
+                                        <td>{activity.id}</td>{console.log(activity)}
                                         <td>{activity.activity_text}</td>
                                         <td>{activity.building  === null ? '' : activity.building.name}</td>
                                         <td>{activity.person  === null ? '' : activity.person.name}</td>

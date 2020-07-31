@@ -6,9 +6,16 @@ class ActivityService {
         return axios.get(`${API_URL}/api/activities`);
     }
 
-
     retrieveTodoById(id) {
         return axios.get(`${API_URL}/api/activities/${id}`);
+    }
+
+    updateActivity(id, activity) {
+          return axios.put(`${API_URL}/api/update/${id}`, activity);
+    }
+
+    createActivity(activity) {
+          return axios.post(`${API_URL}/api/add/`, activity);
     }
 
     deleteActivity(id){

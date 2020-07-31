@@ -28,4 +28,9 @@ public class Building {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "building id: "+id +" name: "+name;
+    }
 }

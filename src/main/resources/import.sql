@@ -24,3 +24,7 @@ UPDATE activity SET
   person_Id = (SELECT id FROM person WHERE name = 'John'),
   building_Id = (SELECT id FROM building WHERE name = 'Dubai Frame')
 WHERE activity_text = 'Some Activity';
+
+UPDATE activity SET
+  person_Id = (SELECT id FROM person WHERE name = 'Jack')
+WHERE activity_text = 'Extra Activity';

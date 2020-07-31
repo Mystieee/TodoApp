@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import BuildingService from "./service/BuildingService.js"
 import PersonService from "./service/PersonService.js"
 import ActivityService from "./service/ActivityService.js"
-import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
+import { Formik, Field, Form} from "formik";
 import {fieldset} from 'react-fieldset';
 
 
@@ -13,14 +13,14 @@ constructor(props) {
            this.state = {
                        id: this.props.match.params.id,
                        activity_text: '',
-                       building:'',
-                       person:'',
+                       building: [],
+                       person:[],
                        buildings: [],
                        persons: []
                    }
            this.selectBuildings = this.selectBuildings.bind(this)
            this.selectPersons = this.selectPersons.bind(this)
-           this.onSubmit = this.onSubmit.bind(this)
+           this.onSaveButtonSubmit = this.onSaveButtonSubmit.bind(this)
     };
 componentDidMount() {
 
@@ -29,11 +29,13 @@ componentDidMount() {
                 if (this.state.id == -1) {
                     return
                 }
+
+                console.log(this.state);
                 ActivityService.retrieveTodoById(this.state.id)
                     .then(response => this.setState({
                         activity_text: response.data.activity_text,
-                        building: response.data.building  === null ? ' ' : response.data.building.name,
-                        person: response.data.person  === null ? ' ' : response.data.person.name
+                        building: response.data.building  === null ? ' ' : response.data.building,
+                        person: response.data.person  === null ? ' ' : response.data.person
 
 
                     }))
@@ -60,9 +62,36 @@ selectPersons(){
                         }
                     )
 }
-onSubmit(values) {
-    console.log(values);
+onSaveButtonSubmit(values) {
+
+        let formActivityData = {
+                id: this.state.id,
+                activity_text: values.activity_text,
+                building: Array.from(this.state.buildings.filter(x => x.name== values.building.name))[0],
+                person: Array.from(this.state.persons.filter(x => x.name== values.person.name))[0]
+            }
+
+            if (this.state.id === -1) {
+                ActivityService.createActivity(formActivityData)
+                    .then(() => this.props.history.push('/todos'))
+            }
+            else {
+
+                ActivityService.updateActivity(this.state.id, formActivityData)
+                    .then(
+                         (response) => {
+                                                            console.log("Response ->",response);
+                                                            this.props.history.push('/todos')
+                                        }
+                    ).catch((error) => {
+                        if(error.response){
+                            console.log("error ->",error.response);
+                        }
+                    });
+            }
+
 }
+
 render(){
 
     let { activity_text, id , person, building} = this.state
@@ -73,7 +102,7 @@ render(){
                  <Formik
                     enableReinitialize
                     initialValues= { this.state }
-                    onSubmit={this.onSubmit}
+                    onSubmit={this.onSaveButtonSubmit}
                  >
                      {
                          (props) => (
@@ -91,12 +120,12 @@ render(){
                                   <fieldset className="form-group">
                                       <label>Building    </label>
 
-                                      <Field as="select" name='building' className="form-control">
+                                      <Field as="select" name='building.name' id='building.id'  className="form-control" >
                                                    <option key='0'> </option>
                                                     {
                                                          this.state.buildings.map(
                                                              bldg =>
-                                                                 <option key={bldg.id}>{bldg.name} </option>
+                                                                 <option key={bldg.id}>{bldg.name}</option>
                                                          )
                                                     }
                                       </Field>
@@ -105,7 +134,7 @@ render(){
 
                                   <fieldset className="form-group">
                                       <label>Person    </label>
-                                       <Field as="select" name='person' className="form-control">
+                                       <Field as="select" name='person.name' id='person.id' className="form-control">
                                                  <option key='0'> </option>
                                                   {
                                                         this.state.persons.map(
