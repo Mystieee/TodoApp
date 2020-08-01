@@ -9,22 +9,27 @@ VALUES
 INSERT INTO person
   (name)
 VALUES
-  ('John'),
-  ('Doe'),
-  ('Jack');
+  ('John Doe'),
+  ('Taylor M'),
+  ('Kelly Stark');
 
 INSERT INTO activity
   (activity_text)
 VALUES
-('Some Activity'),
-('New Activity '),
-('Extra Activity');
+('fixing defects'),
+('cleaning the facade'),
+('renewing the fire extinguishers'),
+('electrical repairs');
 
 UPDATE activity SET
-  person_Id = (SELECT id FROM person WHERE name = 'John'),
+  person_Id = (SELECT id FROM person WHERE name = 'John Doe'),
   building_Id = (SELECT id FROM building WHERE name = 'Dubai Frame')
-WHERE activity_text = 'Some Activity';
+WHERE activity_text = 'renewing the fire extinguishers';
 
 UPDATE activity SET
-  person_Id = (SELECT id FROM person WHERE name = 'Jack')
-WHERE activity_text = 'Extra Activity';
+  person_Id = (SELECT id FROM person WHERE name = 'Taylor M')
+WHERE activity_text = 'cleaning the facade';
+
+UPDATE activity SET
+  building_Id = (SELECT id FROM building WHERE name = 'Dubai Frame')
+WHERE activity_text = 'electrical repairs';

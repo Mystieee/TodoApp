@@ -10,10 +10,13 @@ import com.example.todoApp.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,11 +50,6 @@ public class ActivityController {
 
         return new ResponseEntity(activity, HttpStatus.ACCEPTED);
     }
-
-
-
-
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Activity> deleteActivity(@PathVariable(required = true) long id){
@@ -90,13 +88,6 @@ public class ActivityController {
             originalActivity.setActivity_text(activityRequest.activity_text);
         }
 
-//        if (activityRequest.done != null) {
-//            originalTask.setDone(taskRequestBody.done);
-//        }
-
-
-        System.out.println("activityRequest.person.getId()**" +activityRequest.person);
-
         if (activityRequest.person != null) {
             person = personRepository.findById(activityRequest.person.getId());
 
@@ -126,36 +117,46 @@ public class ActivityController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
-
-
-
-
-
-
-
     @PostMapping("/add")
-    public ResponseEntity<Activity> addActivity (@PathVariable(required = true) long id , @RequestBody Activity requestActivity){
+    public ResponseEntity<Void> createActivity(@RequestBody() ActivityResponseBody activityRequest) {
 
-        activityRepository.save(requestActivity);
+        Optional<Person> person = Optional.empty();
+        Optional<Building> building = Optional.empty();
 
-        return new ResponseEntity<>(requestActivity, HttpStatus.OK);
+        Activity activity = new Activity();
 
+        if(activityRequest.getId() == -1 || activityRequest.getId()== 0){
+          Long id = activityRepository.count() + 1;
+          activity.setId(id);
+        }
+
+        if (activityRequest.getActivity_text() == null || activityRequest.getActivity_text().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            activity.setActivity_text(activityRequest.getActivity_text());
+        }
+
+        if (activityRequest.getPerson() != null) {
+            person = personRepository.findById(activityRequest.getPerson().getId());
+            if (person.isPresent()) {
+                activity.setPerson(person.get());
+            }
+        }
+
+        if (activityRequest.getBuilding() != null) {
+            building = buildingRepository.findById(activityRequest.getBuilding().getId());
+            if (building.isPresent()) {
+                activity.setBuilding(building.get());
+            }
+        }
+
+        activityRepository.save(activity);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(activityRequest.getId())
+                .toUri();
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setLocation(uri);
+
+        return new ResponseEntity(activity,responseHeaders, HttpStatus.CREATED);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -24,25 +24,22 @@ constructor(props) {
     };
 componentDidMount() {
 
-          console.log(this.state.id)
-                // eslint-disable-next-line
-                if (this.state.id == -1) {
-                    return
-                }
-
-                console.log(this.state);
-                ActivityService.retrieveTodoById(this.state.id)
-                    .then(response => this.setState({
-                        activity_text: response.data.activity_text,
-                        building: response.data.building  === null ? ' ' : response.data.building,
-                        person: response.data.person  === null ? ' ' : response.data.person
-
-
-                    }))
-
-
         this.selectBuildings();
         this.selectPersons();
+
+        // eslint-disable-next-line
+        if (this.state.id == -1) {
+            return
+        }
+
+        ActivityService.retrieveTodoById(this.state.id)
+            .then(response => this.setState({
+                activity_text: response.data.activity_text,
+                building: response.data.building  === null ? ' ' : response.data.building,
+                person: response.data.person  === null ? ' ' : response.data.person
+
+
+            }))
 }
 selectBuildings() {
         BuildingService.retrieveAllBuildings()
@@ -63,7 +60,7 @@ selectPersons(){
                     )
 }
 onSaveButtonSubmit(values) {
-
+        console.log("insdie submit");
         let formActivityData = {
                 id: this.state.id,
                 activity_text: values.activity_text,
@@ -71,7 +68,8 @@ onSaveButtonSubmit(values) {
                 person: Array.from(this.state.persons.filter(x => x.name== values.person.name))[0]
             }
 
-            if (this.state.id === -1) {
+            if (this.state.id == -1) {
+                console.log("--inside add--", formActivityData);
                 ActivityService.createActivity(formActivityData)
                     .then(() => this.props.history.push('/todos'))
             }
@@ -89,7 +87,6 @@ onSaveButtonSubmit(values) {
                         }
                     });
             }
-
 }
 
 render(){

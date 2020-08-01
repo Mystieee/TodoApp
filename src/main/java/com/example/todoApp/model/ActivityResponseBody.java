@@ -1,10 +1,20 @@
 package com.example.todoApp.model;
 
 public class ActivityResponseBody {
+
+    public Long id;
     public String activity_text;
     public Boolean status;
     public Building building;
     public Person person;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getActivity_text() {
         return activity_text;
@@ -40,6 +50,6 @@ public class ActivityResponseBody {
 
     @Override
     public String toString() {
-        return "text: "+activity_text +"building:{ "+building +"person: {"+person;
+        return "id: "+ id+" text: "+activity_text +"building: "+building +"person: "+person;
     }
 }
