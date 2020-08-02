@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import ActivityService from "./service/ActivityService.js"
+import ActivityService from "../service/ActivityService.js"
+import AppNavbar from "../AppNavbar.js"
 
 class TodoList extends Component{
 
@@ -47,7 +48,9 @@ class TodoList extends Component{
 render(){
     return(
         <div>
+        <AppNavbar />
             <div className="container">
+                <br />
                 <table className="table">
                     <thead>
                         <tr>

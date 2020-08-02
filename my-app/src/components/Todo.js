@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import BuildingService from "./service/BuildingService.js"
-import PersonService from "./service/PersonService.js"
-import ActivityService from "./service/ActivityService.js"
+import BuildingService from "../service/BuildingService.js"
+import PersonService from "../service/PersonService.js"
+import ActivityService from "../service/ActivityService.js"
+import AppNavbar from "../AppNavbar.js"
 import { Formik, Field, Form} from "formik";
 import {fieldset} from 'react-fieldset';
 
@@ -93,7 +94,8 @@ render(){
 
     let { activity_text, id , person, building} = this.state
      return (
-
+        <div>
+             <AppNavbar />
              <div className="container">
              <h3>Todos</h3>
                  <Formik
@@ -148,6 +150,7 @@ render(){
                      }
                  </Formik>
              </div>
+        </div>
 
       );
 }
