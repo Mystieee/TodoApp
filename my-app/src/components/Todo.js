@@ -3,7 +3,7 @@ import BuildingService from "../service/BuildingService.js"
 import PersonService from "../service/PersonService.js"
 import ActivityService from "../service/ActivityService.js"
 import AppNavbar from "../AppNavbar.js"
-import { Formik, Field, Form} from "formik";
+import { Formik, Field, Form,ErrorMessage} from "formik";
 import {fieldset} from 'react-fieldset';
 
 
@@ -22,6 +22,7 @@ constructor(props) {
            this.selectBuildings = this.selectBuildings.bind(this)
            this.selectPersons = this.selectPersons.bind(this)
            this.onSaveButtonSubmit = this.onSaveButtonSubmit.bind(this)
+           this.validate = this.validate.bind(this)
     };
 componentDidMount() {
 
@@ -36,8 +37,8 @@ componentDidMount() {
         ActivityService.retrieveTodoById(this.state.id)
             .then(response => this.setState({
                 activity_text: response.data.activity_text,
-                building: response.data.building  === null ? ' ' : response.data.building,
-                person: response.data.person  === null ? ' ' : response.data.person
+                building: response.data.building  == null ? ' ' : response.data.building,
+                person: response.data.person  == null ? ' ' : response.data.person
 
 
             }))
@@ -61,16 +62,14 @@ selectPersons(){
                     )
 }
 onSaveButtonSubmit(values) {
-        console.log("insdie submit");
         let formActivityData = {
                 id: this.state.id,
                 activity_text: values.activity_text,
-                building: Array.from(this.state.buildings.filter(x => x.name== values.building.name))[0],
-                person: Array.from(this.state.persons.filter(x => x.name== values.person.name))[0]
+                building: Array.from(this.state.buildings.filter(x => x.name=== values.building.name))[0],
+                person: Array.from(this.state.persons.filter(x => x.name=== values.person.name))[0]
             }
 
             if (this.state.id == -1) {
-                console.log("--inside add--", formActivityData);
                 ActivityService.createActivity(formActivityData)
                     .then(() => this.props.history.push('/todos'))
             }
@@ -90,37 +89,48 @@ onSaveButtonSubmit(values) {
             }
 }
 
+validate(values) {
+    let errors = {}
+    if (!values.activity_text) {
+        errors.activity_text = 'Please enter a Description'
+    } else if (values.activity_text.length < 5) {
+        errors.activity_text = 'Please enter atleast 5 characters'
+    }
+    return errors
+}
+
 render(){
 
     let { activity_text, id , person, building} = this.state
      return (
         <div>
-             <AppNavbar />
+             <AppNavbar /><br/>
              <div className="container">
-             <h3>Todos</h3>
+             <h3>Add Todos</h3>
                  <Formik
                     enableReinitialize
                     initialValues= { this.state }
                     onSubmit={this.onSaveButtonSubmit}
+                    validateOnChange={false}
+                    validateOnBlur={false}
+                    validate={this.validate}
                  >
                      {
                          (props) => (
                              <Form>
-                                 <fieldset className="form-group">
-                                     <label>Id </label>
-                                     <Field className="form-control" type="text" name="id" disabled />
-                                 </fieldset>
+                                 <ErrorMessage name="activity_text" component="div"
+                                     className="alert alert-warning" />
 
                                  <fieldset className="form-group">
-                                     <label>Description    </label>
-                                     <Field className="form-control" type="text" name='activity_text' />
+                                     <label>Description</label>
+                                     <Field className="form-control" type="text" name='activity_text' placeholder="Enter a description" />
                                  </fieldset>
 
                                   <fieldset className="form-group">
                                       <label>Building    </label>
 
                                       <Field as="select" name='building.name' id='building.id'  className="form-control" >
-                                                   <option key='0'> </option>
+                                                   <option key='0'>Select a building--</option>
                                                     {
                                                          this.state.buildings.map(
                                                              bldg =>
@@ -133,8 +143,8 @@ render(){
 
                                   <fieldset className="form-group">
                                       <label>Person    </label>
-                                       <Field as="select" name='person.name' id='person.id' className="form-control">
-                                                 <option key='0'> </option>
+                                       <Field as="select" name='person.name' id='person.id' className="form-control" >
+                                                 <option key='0'>Select a person--</option>
                                                   {
                                                         this.state.persons.map(
                                                             prsn =>

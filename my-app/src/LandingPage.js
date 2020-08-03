@@ -52,8 +52,8 @@ export default class LandingPage extends React.Component{
 
                   <section class="py-5">
                     <div class="container">
-                      <h1>Section Heading</h1>
-                      <button onClick={()=>this.redirectToToDoPage()}>Track TODOs </button>
+                      <h1>Section Heading</h1><br/>
+                      <button class="btn btn-primary" onClick={()=>this.redirectToToDoPage()}>Track TODOs </button> <br/><br/>
                       <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, suscipit, rerum quos facilis repellat architecto commodi officia atque nemo facere eum non illo voluptatem quae delectus odit vel itaque amet.</p>
                     </div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 import ActivityService from "../service/ActivityService.js"
 import AppNavbar from "../AppNavbar.js"
 
@@ -27,6 +27,7 @@ class TodoList extends Component{
     }
 
     deleteActivityClicked(id){
+
          ActivityService.deleteActivity(id)
             .then(
                 response => {
@@ -45,12 +46,16 @@ class TodoList extends Component{
             this.props.history.push(`/todos/-1`)
     }
 
+
+
+
 render(){
-    return(
+return(
         <div>
-        <AppNavbar />
+        <AppNavbar /><br />
             <div className="container">
                 <br />
+                {this.state.activities.length > 0 ?
                 <table className="table">
                     <thead>
                         <tr>
@@ -68,19 +73,21 @@ render(){
                                         <td>{activity.activity_text}</td>
                                         <td>{activity.building  === null ? '' : activity.building.name}</td>
                                         <td>{activity.person  === null ? '' : activity.person.name}</td>
-                                        <td><button className ="btn btn-warning" onClick={() => this.deleteActivityClicked(activity.id)} >Delete</button>&nbsp;&nbsp;&nbsp;
-                                        <button className="btn btn-success" onClick={() => this.updateActivityClicked(activity.id)}>Update</button></td>
-
+                                        <td><button className="btn btn-outline-primary" onClick={() => this.updateActivityClicked(activity.id)}>Update</button>&nbsp;&nbsp;&nbsp;
+                                            <button className ="btn btn-outline-danger" onClick={() => this.deleteActivityClicked(activity.id)} >Delete</button></td>
                                     </tr>
                             )
                         }
                     </tbody>
                 </table>
-
+                : ''}
                 <div className="row">
-                    <button className="btn btn-success" onClick={this.addActivityClicked}>Add</button>
+                    <button className="btn btn-success" onClick={this.addActivityClicked}>Add ToDo</button>
                 </div>
+                <hr/>
+                 <span> {this.state.activities.length > 0 ? this.state.activities.length+" active task to do" : "No Active todos" }</span>
             </div>
+
         </div>
     );
 }
